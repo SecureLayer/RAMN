@@ -199,6 +199,25 @@ For example, if you want to know the status of ECU C's joystick from ECU A, you 
 
 If you want an ECU to stop sending messages, simply comment out the call to ``RAMN_DBC_Send``.
 
+.. _showcase_mode:
+
+Showcase Mode
+-------------
+
+RAMN includes a "Showcase Mode" (enabled via ``#define RAMN_SHOWCASE_MODE`` in ``ramn_config.h``) designed for testing and demonstrations where physical user input is not available or should be ignored.
+
+In this mode, the vehicle's control flow is significantly altered:
+
+1. **Commands are randomized at 1 Hz, by each ECU:**
+   - ECU A randomizes Brake, Accel, RPM, Steering, Shift and Side-brake, ECU B the Lights, ECU C the Horn and Turn Indicators, and ECU D the Engine Key (Accessory and Ignition bits).
+   - ECU A will not remain silent at startup (the default behavior for ECU A).
+
+2. **ECU B and ECU C ignore physical sensors:**
+   - **ECU B (Chassis):** Completely ignores the physical steering wheel potentiometer and sidebrake switch. It will follow the ``command_steer`` and ``command_sidebrake`` received via CAN regardless of noise or manual movement.
+   - **ECU C (Powertrain):** Completely ignores the physical brake and accelerator pedals, as well as the shift joystick state. It will follow the ``command_brake``, ``command_accel``, and ``command_shift`` received via CAN.
+
+Because ECU A transmits continuously in this mode, the flashing scripts (``ProgramECU_BCD.sh``/``.bat``) first run ``scripts/STbootloader/disable_showcase.py`` to stop it and avoid flooding the bus.
+
 .. _traffic_modes:
 
 Traffic Modes (Default vs. J1939)
