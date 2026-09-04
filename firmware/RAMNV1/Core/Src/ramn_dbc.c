@@ -217,7 +217,7 @@ void RAMN_DBC_ProcessCANMessage(uint32_t canid, uint32_t dlc, RAMN_CANFrameData_
 #ifdef RAMN_SHOWCASE_MODE
 					RAMN_DBC_Handle.control_enginekey = enginekey;
 #else
-					if (enginekey != 3) RAMN_DBC_Handle.control_enginekey = enginekey;
+					RAMN_DBC_Handle.control_enginekey = enginekey;
 #endif
 				}
 				else if (sa == J1939_SA_POWERTRAIN_CTRL)
